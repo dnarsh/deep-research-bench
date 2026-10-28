@@ -4,11 +4,11 @@
 .check-target .check-box{width:20px;height:20px}
 .check-box:checked::after{font-size:14px}
 .case-title{min-height:24px;padding:2px 0;align-items:center}
-.case-table th:first-child,.case-table td:first-child{width:56px}
+.case-table:not(.neuron-table) th:first-child,.case-table:not(.neuron-table) td:first-child{width:56px}
 @media(max-width:740px),(pointer:coarse){
   .check-target{width:44px;height:44px;margin:-12px 0}
   .case-title{min-height:44px;padding:8px 0}
-  .case-table th:first-child,.case-table td:first-child{width:60px;padding-left:12px}
+  .case-table:not(.neuron-table) th:first-child,.case-table:not(.neuron-table) td:first-child{width:60px;padding-left:12px}
 }
 
 /* Readable data text: body cells and controls 13-14px; meta stays 11-12px. */
@@ -25,6 +25,15 @@ button,select,.search input,.answer-input,.citation-input{font-size:13px}
   .neuron-table,.neuron-table tbody{display:block}
   .neuron-table tr{display:grid;grid-template-columns:1fr auto auto;gap:3px 12px;padding:11px 16px;border-bottom:1px solid var(--rule)}
   .neuron-table td{padding:0;border:0;min-width:0}
-  .neuron-table td:first-child{grid-column:1/-1;white-space:nowrap;overflow-wrap:normal}
+  .neuron-table td:first-child{grid-column:1/-1;width:auto;padding:0;white-space:nowrap;overflow-wrap:normal}
+  .neuron-table td:last-child{padding:0}
   .neuron-table .mono{overflow-wrap:normal;font-size:12px}
+}
+
+/* Connectome filter form: wrap on phones; search takes the full first row, select and button share the second. */
+@media(max-width:480px){
+  .connectome-grid .filter-row{flex-wrap:wrap}
+  .connectome-grid .filter-row .search{flex:1 1 100%}
+  .connectome-grid .filter-row select{flex:1 1 0;max-width:none;min-width:0;min-height:44px}
+  .connectome-grid .filter-row button{flex:0 0 auto;min-width:88px;min-height:44px}
 }
