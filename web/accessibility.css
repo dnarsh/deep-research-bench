@@ -37,3 +37,24 @@ button,select,.search input,.answer-input,.citation-input{font-size:13px}
   .connectome-grid .filter-row select{flex:1 1 0;max-width:none;min-width:0;min-height:44px}
   .connectome-grid .filter-row button{flex:0 0 auto;min-width:88px;min-height:44px}
 }
+
+/* Overview: introduction, three-step workflow, demo cards. Flat, one accent, 14px body. */
+.overview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start;margin-bottom:22px}
+.overview-lead{grid-column:1/-1;padding:28px 30px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+.overview-lead h2{font-size:28px;line-height:1.2;letter-spacing:-.5px;max-width:640px;margin-bottom:12px}
+.overview-lead p,.synopsis{font-size:14px;line-height:1.7;color:var(--text);max-width:68ch}
+.synopsis+.synopsis{margin-top:12px}
+.workflow{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin:0;padding:0;list-style:none}
+.workflow>li{padding:18px 20px;background:var(--raised);border-radius:8px;font-size:14px;line-height:1.6;color:var(--muted)}
+.workflow>li strong{display:block;color:var(--text);font-size:14px;font-weight:500;margin-bottom:6px}
+.demo-card{display:flex;flex-direction:column;gap:12px;padding:20px 22px;background:var(--surface);border:1px solid var(--border);border-radius:8px;min-width:0}
+.demo-card h3{font-size:15px}
+.demo-card p{font-size:14px;line-height:1.65;color:var(--muted)}
+.demo-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
+.demo-actions button{min-height:36px}
+@media(max-width:740px){
+  .overview-grid,.workflow{grid-template-columns:1fr}
+  .overview-lead{padding:22px 18px}
+  .overview-lead h2{font-size:24px}
+  .demo-actions button{flex:1 1 auto;min-height:44px}
+}
