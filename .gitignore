@@ -125,3 +125,6 @@ private/
 !.env.example
 !.env.sample
 !.env.template
+
+# Local design inspection artifacts
+.taste-skill/

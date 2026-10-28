@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f5f6f7" />
+    <title>AfterThought — evaluation workspace</title>
+    <link rel="icon" href="/mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/accessibility.css" />
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to workspace</a>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <a class="brand" href="#overview"
+          ><img src="/mark.svg" alt="" width="32" height="32" /><span
+            >AfterThought<small>Evidence before confidence.</small></span
+          ></a
+        >
+        <button
+          class="mobile-menu"
+          id="menu-button"
+          aria-expanded="false"
+          aria-controls="navigation"
+        >
+          Menu
+        </button>
+        <nav id="navigation">
+          <div class="nav-label">Workspace</div>
+          <a href="#overview" data-nav="overview"
+            ><span data-icon="book"></span>Introduction &amp; demos</a
+          >
+          <a href="#guide" data-nav="guide"
+            ><span data-icon="play"></span>Live demo guide</a
+          >
+          <a href="#benchmark" data-nav="benchmark"
+            ><span data-icon="grid"></span>Benchmarks<span
+              class="nav-count"
+              id="nav-count"
+              >—</span
+            ></a
+          >
+          <a href="#runs" data-nav="runs"
+            ><span data-icon="activity"></span>Evaluation runs<span
+              class="nav-count"
+              id="run-count"
+              >0</span
+            ></a
+          >
+          <div class="nav-label second-label">Explore</div>
+          <a href="#connectome" data-nav="connectome"
+            ><span data-icon="network"></span>FlyWire connectome</a
+          >
+          <a href="#research" data-nav="research"
+            ><span data-icon="book"></span>Einstein’s Jump</a
+          >
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="workspace-note">
+            <span class="local-dot"></span>Local workspace
+            <p>Answers stay on this computer.<br />No model keys required.</p>
+          </div>
+          <a
+            href="https://github.com/dnarsh/deep-research-bench"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="source-link"
+            ><span data-icon="code"></span>View source<span aria-hidden="true"
+              >↗</span
+            ></a
+          >
+          <div class="account">
+            <span class="avatar">A</span>
+            <div>Arsh’s workspace<small>AfterThought · v0.1</small></div>
+          </div>
+        </div>
+      </aside>
+      <main id="main" tabindex="-1">
+        <div class="topline">
+          <span id="breadcrumb">Workspace / Benchmarks</span
+          ><span class="server-state" id="server-state"
+            ><span class="local-dot"></span>Connecting to local engine</span
+          >
+        </div>
+        <div id="page"></div>
+        <footer class="page-footer">
+          <span>Built for questions worth checking.</span
+          ><span>Structural checks ≠ factual verification.</span>
+        </footer>
+      </main>
+    </div>
+    <div id="toast" role="status" aria-live="polite" hidden></div>
+    <noscript
+      >This workspace needs JavaScript. The Python benchmark CLI remains
+      available.</noscript
+    >
+  </body>
+</html>

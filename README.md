@@ -1,8 +1,19 @@
-# deep-research-bench
+# AfterThought
+
+A local evidence workspace built on the `deep-research-bench` Python framework.
+
+## Local app
+
+The project now has a local evaluation workspace, an Einstein's Jump research
+companion, and a real FlyWire v783 neuron-metadata explorer. From this source
+checkout, run `python run_app.py`, then open <http://127.0.0.1:8765>.
+Windows users can double-click `start-app.cmd`. No runtime dependencies or API
+keys are required. See [the app guide](web/README.md) for features, evidence,
+privacy, dataset licensing, and the boundaries of structural scoring.
 
 A small (~700 LOC, zero required runtime deps, Python 3.8+) evaluation framework for **deep-research engines** — agentic / retrieval-augmented systems that try to answer non-trivial questions with citations.
 
-Pluggable engines, pluggable scorers (regex contracts / citation count / word count / LLM-as-judge), markdown + JSON reports. Ships with **10 anonymized public benchmark cases** across 8 categories (recency, synthesis, citation-density, niche/post-cutoff, long-form analysis, adversarial honest-deficit, cross-source conflict, code-context multi-step).
+Pluggable engines, pluggable scorers (regex contracts / citation count / word count / LLM-as-judge), markdown + JSON reports. Ships with **10 anonymized public benchmark cases** across 9 categories (recency, synthesis, citation-density, niche/post-cutoff, long-form analysis, adversarial honest-deficit, cross-source conflict, code-context multi-step).
 
 Extracted from a private long-running system that needed to compare its own research engine against several frontier services on its real workload. The framework was carved out for public use; **the private 31-case dogfood eval stays in the original system.** The 10 cases in this repo are a separately-authored public benchmark — none overlap with the private set.
 
@@ -23,13 +34,13 @@ The 10 public cases are designed to be answerable by any decent deep-research sy
 
 ## What this is NOT — read this first
 
-| If you need... | Use... |
-|---|---|
-| **A pre-built leaderboard** with current scores for Perplexity / OpenAI Deep Research / etc. | This is a framework, not a leaderboard. You run it yourself with your own API keys. |
-| **A general LLM benchmark** (MMLU, GSM8K, HumanEval, etc.) | [`lm-evaluation-harness`](https://github.com/EleutherAI/lm-evaluation-harness), [`bigcode-evaluation-harness`](https://github.com/bigcode-project/bigcode-evaluation-harness). This is narrower — it's for deep-research / RAG / agentic systems that produce answers with citations. |
-| **Agent-trajectory tracing / observability** | [LangSmith](https://smith.langchain.com), [Phoenix](https://github.com/Arize-ai/phoenix), [Helicone](https://www.helicone.ai/). This framework only sees the final answer. |
-| **A judge you don't have to write** | This ships a `StubJudge` for tests and a rubric prompt builder. Real LLM judges need your API keys — you write the adapter. |
-| **Bundled engine adapters for Perplexity / OpenAI / Anthropic** | Not shipped on purpose. They need credentials and provider-specific error handling. The framework ships only a `MockEngine` for tests. Writing an adapter is 30 lines — see [Wiring a real engine](#wiring-a-real-engine). |
+| If you need...                                                                               | Use...                                                                                                                                                                                                                                                                                |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **A pre-built leaderboard** with current scores for Perplexity / OpenAI Deep Research / etc. | This is a framework, not a leaderboard. You run it yourself with your own API keys.                                                                                                                                                                                                   |
+| **A general LLM benchmark** (MMLU, GSM8K, HumanEval, etc.)                                   | [`lm-evaluation-harness`](https://github.com/EleutherAI/lm-evaluation-harness), [`bigcode-evaluation-harness`](https://github.com/bigcode-project/bigcode-evaluation-harness). This is narrower — it's for deep-research / RAG / agentic systems that produce answers with citations. |
+| **Agent-trajectory tracing / observability**                                                 | [LangSmith](https://smith.langchain.com), [Phoenix](https://github.com/Arize-ai/phoenix), [Helicone](https://www.helicone.ai/). This framework only sees the final answer.                                                                                                            |
+| **A judge you don't have to write**                                                          | This ships a `StubJudge` for tests and a rubric prompt builder. Real LLM judges need your API keys — you write the adapter.                                                                                                                                                           |
+| **Bundled engine adapters for Perplexity / OpenAI / Anthropic**                              | Not shipped on purpose. They need credentials and provider-specific error handling. The framework ships only a `MockEngine` for tests. Writing an adapter is 30 lines — see [Wiring a real engine](#wiring-a-real-engine).                                                            |
 
 **Use this when**: you want to measure your own deep-research system against frontier baselines on questions YOU care about, with reproducible scoring contracts that don't depend on a third-party leaderboard.
 
@@ -154,6 +165,7 @@ class ClaudeJudge:
 ```
 
 The rubric prompt expects the LLM to reply with exactly:
+
 ```
 SCORE: <1-5>
 REASONING: <one sentence>
@@ -192,17 +204,17 @@ All scoring fields are optional. A case with no `must_contain_regex` is auto-pas
 
 See `cases/public-10.json`. The categories:
 
-| Category | Why it matters |
-|---|---|
-| `recency` | Tests whether the engine actually retrieves post-training-cutoff information |
-| `synthesis` | Requires combining facts from multiple sources into a comparison |
-| `citation-density` | Tests whether the engine produces citable, verifiable sources |
-| `niche-post-cutoff` | Tests handling of topics with limited / specialized literature |
-| `long-form-analysis` | Tests depth — does the engine produce 200+ words of substantive analysis |
+| Category                     | Why it matters                                                                            |
+| ---------------------------- | ----------------------------------------------------------------------------------------- |
+| `recency`                    | Tests whether the engine actually retrieves post-training-cutoff information              |
+| `synthesis`                  | Requires combining facts from multiple sources into a comparison                          |
+| `citation-density`           | Tests whether the engine produces citable, verifiable sources                             |
+| `niche-post-cutoff`          | Tests handling of topics with limited / specialized literature                            |
+| `long-form-analysis`         | Tests depth — does the engine produce 200+ words of substantive analysis                  |
 | `adversarial-honest-deficit` | Tests whether the engine will say "no robust evidence" instead of hallucinating consensus |
-| `cross-source-conflict` | Tests synthesis when sources disagree |
-| `code-context-multi-step` | Tests technical reasoning under specific constraints |
-| `factual-lookup` | The baseline — boring questions an engine should always get right |
+| `cross-source-conflict`      | Tests synthesis when sources disagree                                                     |
+| `code-context-multi-step`    | Tests technical reasoning under specific constraints                                      |
+| `factual-lookup`             | The baseline — boring questions an engine should always get right                         |
 
 **These 10 cases are deliberately not exhaustive.** They're a calibration set. Your own benchmark suite will be larger and more specific to your domain. The framework is designed to handle thousands of cases without ceremony — `load_cases()` is just JSON parsing.
 
@@ -218,7 +230,7 @@ See `cases/public-10.json`. The categories:
 
 4. **`WordCountScorer` does whitespace-split.** It over-counts in code-heavy answers and under-counts in CJK. If you need a tokenizer, write your own scorer.
 
-5. **`CitationCountScorer` counts whatever the engine put in `EngineAnswer.citations`.** It cannot verify those URLs resolve, that they're not hallucinated, or that they actually support the claim. Citation *quality* is the judge's job.
+5. **`CitationCountScorer` counts whatever the engine put in `EngineAnswer.citations`.** It cannot verify those URLs resolve, that they're not hallucinated, or that they actually support the claim. Citation _quality_ is the judge's job.
 
 6. **No built-in parallelism.** The runner is sequential. For 10 engines × 100 cases × 30s/call you're looking at ~8 hours. If you need parallelism, wrap `_run_one_cell` in your own `ThreadPoolExecutor` — but be aware that some providers rate-limit per-key, and concurrent runs make the latency numbers noisy.
 
@@ -234,13 +246,13 @@ See `cases/public-10.json`. The categories:
 
 ## Alternatives — when NOT to use this
 
-| Tool | Use it instead when |
-|---|---|
-| [`lm-evaluation-harness`](https://github.com/EleutherAI/lm-evaluation-harness) | You're evaluating raw LLMs on standard benchmarks (MMLU, BBH, GSM8K). |
-| [`promptfoo`](https://promptfoo.dev) | You want a YAML/UI-driven prompt-versioning tool with built-in assertion types. |
-| [`ragas`](https://github.com/explodinggradients/ragas) | You specifically need RAG-quality metrics (faithfulness, answer-relevance, context-precision). |
-| [LangSmith / Phoenix](https://smith.langchain.com) | You want trace-level observability on an agent's intermediate steps, not just final answers. |
-| A spreadsheet | You have 5 cases and 2 engines and don't want a build step. Honestly fine. |
+| Tool                                                                           | Use it instead when                                                                            |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| [`lm-evaluation-harness`](https://github.com/EleutherAI/lm-evaluation-harness) | You're evaluating raw LLMs on standard benchmarks (MMLU, BBH, GSM8K).                          |
+| [`promptfoo`](https://promptfoo.dev)                                           | You want a YAML/UI-driven prompt-versioning tool with built-in assertion types.                |
+| [`ragas`](https://github.com/explodinggradients/ragas)                         | You specifically need RAG-quality metrics (faithfulness, answer-relevance, context-precision). |
+| [LangSmith / Phoenix](https://smith.langchain.com)                             | You want trace-level observability on an agent's intermediate steps, not just final answers.   |
+| A spreadsheet                                                                  | You have 5 cases and 2 engines and don't want a build step. Honestly fine.                     |
 
 **Why this framework exists when those exist**: most of them assume either (a) you're evaluating raw LLMs on canonical academic benchmarks or (b) you're embedded in a specific framework's ecosystem (LangChain, etc.). This one is for the specific case of "I have an engine that does deep research and I want to score it on questions that look like real-world research, with cheap regex/citation contracts so most cases don't need to hit an LLM judge."
 
@@ -302,6 +314,7 @@ python -m pytest tests/ -v
 Current status: **34 passed in 0.5s** on Python 3.12 / Windows 11.
 
 The key tests:
+
 - `test_load_public_10_actually_loads` — verifies the shipped public-10.json parses cleanly with the loader (no schema drift).
 - `test_runner_records_engine_exception_as_cell_error` — a broken engine doesn't abort the run.
 - `test_reporter_markdown_has_expected_sections` / `test_reporter_json_shape_is_serializable` — report output is stable.
@@ -330,6 +343,7 @@ PRs welcome for:
 - Real-engine adapter examples (in `examples/`, not bundled as a runtime dep) for popular providers.
 
 Please do NOT submit PRs that:
+
 - Bundle a specific provider's SDK as a required dep.
 - Add async / parallel runners as the default (acceptable as an opt-in addon).
 - Expand the 10 public cases without a clear methodology — case selection bias is the whole game.
