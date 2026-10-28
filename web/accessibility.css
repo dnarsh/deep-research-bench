@@ -10,3 +10,21 @@
   .case-title{min-height:44px;padding:8px 0}
   .case-table th:first-child,.case-table td:first-child{width:60px;padding-left:12px}
 }
+
+/* Readable data text: body cells and controls 13-14px; meta stays 11-12px. */
+.case-table td{font-size:13px}
+.neuron-table td{font-size:12px}
+button,select,.search input,.answer-input,.citation-input{font-size:13px}
+.answer-input{font-size:14px}
+.filter-row select,.search input{font-size:13px}
+.neuron-table .mono{font-size:12px}
+
+/* Phones (IAB is 319px): neuron rows become two lines so the 19-digit ID never wraps. */
+@media(max-width:480px){
+  .neuron-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .neuron-table,.neuron-table tbody{display:block}
+  .neuron-table tr{display:grid;grid-template-columns:1fr auto auto;gap:3px 12px;padding:11px 16px;border-bottom:1px solid var(--rule)}
+  .neuron-table td{padding:0;border:0;min-width:0}
+  .neuron-table td:first-child{grid-column:1/-1;white-space:nowrap;overflow-wrap:normal}
+  .neuron-table .mono{overflow-wrap:normal;font-size:12px}
+}
